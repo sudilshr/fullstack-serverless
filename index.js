@@ -50,6 +50,18 @@ class ServerlessFullstackPlugin {
                 }
             }
         };
+
+        // Serverless v3 hotfix/compat.
+        // @note; Better refactor all the cliOptions getters below instead
+        const isv3 = this.serverless.version.split('.')[0] === '3';
+        if (isv3) {
+          const _cliOptions = [...this.cliOptions.param];
+          _cliOptions.forEach((k) => {
+            const key = k.replace('no-', '');
+            const val = !k.includes('no');
+            this.cliOptions[key] = val;
+          });
+        }
     }
 
     validateConfig() {
